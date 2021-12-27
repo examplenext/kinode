@@ -175,7 +175,10 @@ begin
         AddToLog(sMessage, false, false);
         DEBUGMessEnh(0, UnitName, ProcName, sMessage);
         // FormClean(false);
-        Application.MessageBox(PChar(sMessage), 'Module load error', MB_ICONERROR);
+        if _Get_PrintModule_Handle <> 0 then
+        begin
+          Application.MessageBox(PChar(sMessage), 'Module load error', MB_ICONERROR);
+        end;
       end;
       // --------------------------------------------------------------------------
       sMessage := 'Searching for IB/FB client dll...';
@@ -442,4 +445,3 @@ begin
     @@loc:
   end;
 end.
-
