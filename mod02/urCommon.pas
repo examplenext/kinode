@@ -247,6 +247,7 @@ resourcestring
   s_OdeumHorzPos = 'OdeumHorzPos';
   s_OdeumVertPos = 'OdeumVertPos';
   s_CommonOdeumShowHint = 'CommonOdeumShowHint';
+  s_MultiplrMainInt = 'MultiplrMainInt';
   s_PrintMaketVersion = 'PrintMaketVersion';
   s_PrintMaketHorzShift = 'PrintMaketHorzShift';
   s_PrintMaketVertShift = 'PrintMaketVertShift';
@@ -287,7 +288,7 @@ resourcestring
   SeansDateTime_Fmt_Def = '@2,000,050' + m_CRLF + '#Arial,0000,19,204' + m_CRLF + '^0120,0000;' + '%s' + m_CRLF
     + '#Arial,0000,18,204' + m_CRLF + '^0052,0000;' + '  ' + '%s' + '  ' + m_CRLF
     + '#Arial,1000,19,204' + m_CRLF + '^0048,0000;' + '%s';
-  }  
+  }
   str_SeansDate = 'SeansDate';
   SeansDate_Fmt_Def = '@2,000,050' + m_CRLF + '#Arial,0000,19,204' + m_CRLF + '^0120,0000;' + '%s';
   str_SeansTime = 'SeansTime';
@@ -668,4 +669,3 @@ resourcestring
 implementation
 
 end.
-

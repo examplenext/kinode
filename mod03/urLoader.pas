@@ -33,7 +33,11 @@ const
   // -----------------------------------------------------------------------------
   MultiplrMini: real = 2;
   MultiplrTopo: real = 5;
-  MultiplrMain: real = 5.7;
+  MultiplrMainIntDef = 570;
+
+var
+  MultiplrMainInt : integer; // = MultiplrMainIntDef;
+  MultiplrMain: real; // = MultiplrMainInt / 100;
   // -----------------------------------------------------------------------------
 
 implementation

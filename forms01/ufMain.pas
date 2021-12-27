@@ -400,7 +400,7 @@ uses
   Bugger, uhGetver, StrConsts, uTools, ufSplash, uhLoader, uhTicket, uhMain,
   ufGenre, ufFilm, ufSeans, ufTariff, ufCost, ufRepert, uhCommon, urCommon,
   uhBase, uhTariff, uhPrint, ufInfo, ufDRpAz, ufDRpBe, ufDRpEx, ufPrice,
-  ufAbjnl;
+  ufAbjnl, urLoader;
 
 {$R *.DFM}
 
@@ -416,6 +416,7 @@ var
   Time_Start, Time_End: TDateTime;
   Hour, Min, Sec, MSec: Word;
   i, tmp_Zal_Kod, tmp_Odeum_Horz_Pos, tmp_Odeum_Vert_Pos: integer;
+  tmp_MultiplrMainInt: integer;
   tmp_Print_Maket_Version, tmp_Print_Maket_Horz_Shift, tmp_Print_Maket_Vert_Shift: integer;
   tmp_Odeum_Show_Hint: string;
   tmp_BlankForm_Num: integer;
@@ -429,6 +430,18 @@ begin
   Cur_Film_Kod := -1;
   Cur_Film_Nam := '';
   Cur_Seans_Time := '';
+  // --------------------------------------------------------------------------
+  MultiplrMainInt := MultiplrMainIntDef;
+  MultiplrMain := MultiplrMainInt / 100;
+  if LoadInitParameterInt(s_Preferences_Section, s_MultiplrMainInt, MultiplrMainInt,
+    tmp_MultiplrMainInt) then
+  begin
+    if (tmp_MultiplrMainInt > 0) and (tmp_MultiplrMainInt < 10000) then
+      MultiplrMainInt := tmp_MultiplrMainInt;
+      MultiplrMain := MultiplrMainInt / 100;
+  end;
+  // --------------------------------------------------------------------------
+  SaveInitParameter(s_Preferences_Section, s_MultiplrMainInt, IntToStr(MultiplrMainInt));
   // --------------------------------------------------------------------------
   // 2.1) Загрузка всех залов
   // --------------------------------------------------------------------------
@@ -2799,4 +2812,3 @@ begin
 end;
 
 end.
-
