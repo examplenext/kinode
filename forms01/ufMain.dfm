@@ -3111,6 +3111,8 @@ object fm_Main: Tfm_Main
       OnExecute = saRestoreExecute
     end
     object saOneTicket: TAction
+      Enabled = False
+      Visible = False
       Caption = 'Один билет (&1)'
       Hint = 'Продажа подготовленных билетов (печать одним билетом)'
       ImageIndex = 5
@@ -3246,6 +3248,8 @@ object fm_Main: Tfm_Main
         Action = saPosterminal
       end
       object miOneTicket: TMenuItem
+        Enabled = False
+        Visible = False
         Action = saOneTicket
       end
       object miLine28: TMenuItem
@@ -3410,6 +3414,8 @@ object fm_Main: Tfm_Main
       Action = saPosterminal
     end
     object miLineActions1One: TMenuItem
+      Enabled = False
+      Visible = False
       Action = saOneTicket
     end
     object miLineActions4Foo: TMenuItem
