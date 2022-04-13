@@ -2,3 +2,7 @@
 *.dcu
 *.~*
 *.log
+/kinode.ini
+/kinode01.map
+/kinode01.cfg
+/kinode01.drc
