@@ -61,7 +61,7 @@ AutoIncBuild=1
 MajorVer=1
 MinorVer=2
 Release=8
-Build=133
+Build=136
 Debug=0
 PreRelease=0
 Special=0
@@ -72,17 +72,15 @@ CodePage=1251
 [Version Info Keys]
 CompanyName=Cinema Dev
 FileDescription=KinoDE project
-FileVersion=1.2.8.133
+FileVersion=1.2.8.136
 InternalName=kinode
 LegalCopyright=n0mad eagle eye
 LegalTrademarks=for internal use only
 OriginalFilename=kinode.exe
 ProductName=KinoDE
 ProductVersion=1.2.8.x
-Comments=2013.01.23.01
-PrivateBuild=2013.01.23.01
-[Excluded Packages]
-$(DELPHI)\Bin\dclmid50.bpl=Borland MIDAS Components
+Comments=2022.04.13.01
+PrivateBuild=2022.04.13.01
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
