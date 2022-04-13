@@ -1350,6 +1350,9 @@ begin
       DEBUGMessEnh(0, UnitName, ProcName, 'Printed = ' + c_Boolean[Printed]);
       DEBUGMessEnh(0, UnitName, ProcName, 'Cheqed = ' + c_Boolean[Cheqed]);
 {$ENDIF}
+{$IFDEF Debug_Level_6}
+      DEBUGMessEnh(0, UnitName, ProcName, 'tmpMenuItem.Tag = ' + IntToStr(tmpMenuItem.Tag));
+{$ENDIF}
       if (tmpMenuItem.Tag > 0) then
       begin
         tmpTicketKod := tmpMenuItem.Tag;
@@ -1362,8 +1365,24 @@ begin
 {$IFDEF Debug_Level_5}
             DEBUGMessEnh(0, UnitName, ProcName, 'First select...');
 {$ENDIF}
+{$IFDEF Debug_Level_6}
+            DEBUGMessEnh(0, UnitName, ProcName, 'tmpSeatEx.Tag = ' + IntToStr(tmpSeatEx.Tag));
+{$ENDIF}
             Tag := -2;
+{$IFDEF Debug_Level_6}
+            DEBUGMessEnh(0, UnitName, ProcName, 'tmpSeatEx.Tag = ' + IntToStr(tmpSeatEx.Tag));
+{$ENDIF}
+{$IFDEF Debug_Level_6}
+            DEBUGMessEnh(0, UnitName, ProcName, 'tmpSeatEx.TicketKod = ' + IntToStr(tmpSeatEx.TicketKod));
+{$ENDIF}
+            TicketKod := tmpTicketKod;
+{$IFDEF Debug_Level_6}
+            DEBUGMessEnh(0, UnitName, ProcName, 'tmpSeatEx.TicketKod = ' + IntToStr(tmpSeatEx.TicketKod));
+{$ENDIF}
             Click;
+{$IFDEF Debug_Level_6}
+            DEBUGMessEnh(0, UnitName, ProcName, 'tmpSeatEx.TicketKod = ' + IntToStr(tmpSeatEx.TicketKod));
+{$ENDIF}
             // tcx_SeatExSelect(tmpSeatEx, False, tmpCtrlSelect);
             // tmpSeatEx.Selected := tmpCtrlSelect;
           end; // if (SeatState in ...
@@ -1375,6 +1394,9 @@ begin
             begin
 {$IFDEF Debug_Level_5}
               DEBUGMessEnh(0, UnitName, ProcName, 'Let''s prepare...');
+{$ENDIF}
+{$IFDEF Debug_Level_6}
+              DEBUGMessEnh(0, UnitName, ProcName, 'tmpTicketKod = ' + IntToStr(tmpTicketKod));
 {$ENDIF}
               tmpSXInfo.Action := c_OperActionEx2Int[oxPrepare];
               tmpSXInfo.vTicketKod := tmpTicketKod;
@@ -1522,8 +1544,11 @@ begin
         DEBUGMessEnh(0, UnitName, ProcName, 'Printed = ' + c_Boolean[Printed]);
         DEBUGMessEnh(0, UnitName, ProcName, 'Cheqed = ' + c_Boolean[Cheqed]);
 {$ENDIF}
-{$IFDEF Debug_Level_7}
+{$IFDEF Debug_Level_6}
         DEBUGMessEnh(0, UnitName, ProcName, 'Let''s select...');
+{$ENDIF}
+{$IFDEF Debug_Level_6}
+        DEBUGMessEnh(0, UnitName, ProcName, 'TicketKod = ' + IntToStr(TicketKod));
 {$ENDIF}
         DoCtrlSelect := OperModify(_ProcTransOptions,
           oaSelect, PrintCount, Cheqed,
@@ -1543,8 +1568,11 @@ begin
       end
       else
       begin
-{$IFDEF Debug_Level_7}
+{$IFDEF Debug_Level_6}
         DEBUGMessEnh(0, UnitName, ProcName, 'Let''s cancel native...');
+{$ENDIF}
+{$IFDEF Debug_Level_6}
+        DEBUGMessEnh(0, UnitName, ProcName, 'TicketKod = ' + IntToStr(TicketKod));
 {$ENDIF}
         DoCtrlSelect := OperModify(_ProcTransOptions,
           oaCancel, PrintCount, Cheqed,
@@ -1618,7 +1646,10 @@ begin
 {$IFDEF Debug_Level_5}
               DEBUGMessEnh(0, UnitName, ProcName, 'Let''s do reserve ...');
 {$ENDIF}
-              DoCtrlChange := OperModify([poStartTransAction],
+{$IFDEF Debug_Level_6}
+        DEBUGMessEnh(0, UnitName, ProcName, 'TicketKod = ' + IntToStr(TicketKod));
+{$ENDIF}
+              DoCtrlChange := OperModify([poStartTransAction, poCommitTransActionAfter],
                 oaReserve, PrintCount, Cheqed,
                 SeatRow, SeatColumn, -3,
                 Cur_Repert_Kod, TicketKod, Reason, int_Oper_Kod, str_Oper_Serial,
@@ -1662,7 +1693,10 @@ begin
 {$IFDEF Debug_Level_5}
               DEBUGMessEnh(0, UnitName, ProcName, 'Let''s do free ...');
 {$ENDIF}
-              DoCtrlChange := OperModify([poStartTransAction],
+{$IFDEF Debug_Level_6}
+        DEBUGMessEnh(0, UnitName, ProcName, 'TicketKod = ' + IntToStr(TicketKod));
+{$ENDIF}
+              DoCtrlChange := OperModify([poStartTransAction, poCommitTransActionAfter],
                 oaFree, PrintCount, Cheqed,
                 SeatRow, SeatColumn, -4,
                 Cur_Repert_Kod, TicketKod, Reason, int_Oper_Kod, str_Oper_Serial,
@@ -1725,6 +1759,9 @@ begin
 {$IFDEF Debug_Level_5}
                 DEBUGMessEnh(0, UnitName, ProcName, 'Let''s do restore ...');
 {$ENDIF}
+{$IFDEF Debug_Level_6}
+        DEBUGMessEnh(0, UnitName, ProcName, 'TicketKod = ' + IntToStr(TicketKod));
+{$ENDIF}
                 DoCtrlChange := OperModify([poStartTransAction, poCommitTransActionAfter],
                   oaRestore, PrintCount, Cheqed,
                   SeatRow, SeatColumn, -4,
@@ -1756,6 +1793,9 @@ begin
               begin
 {$IFDEF Debug_Level_5}
                 DEBUGMessEnh(0, UnitName, ProcName, 'Let''s cancel native...');
+{$ENDIF}
+{$IFDEF Debug_Level_6}
+        DEBUGMessEnh(0, UnitName, ProcName, 'TicketKod = ' + IntToStr(TicketKod));
 {$ENDIF}
                 DoCtrlChange := OperModify([poStartTransAction, poCommitTransActionAfter],
                   oaCancel, PrintCount, Cheqed,
@@ -1829,6 +1869,9 @@ begin
       begin
 {$IFDEF Debug_Level_5}
         DEBUGMessEnh(0, UnitName, ProcName, 'Let''s cancel foreign...');
+{$ENDIF}
+{$IFDEF Debug_Level_6}
+        DEBUGMessEnh(0, UnitName, ProcName, 'TicketKod = ' + IntToStr(TicketKod));
 {$ENDIF}
         MakeCancel := OperModify([poStartTransAction, poCommitTransActionAfter],
           oaCancel, PrintCount, Cheqed,
