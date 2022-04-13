@@ -869,7 +869,7 @@ begin
         begin
           tmpMenuItem.ImageIndex := index;
           tmpMenuItem.Tag := i_TICKET_KOD;
-          tmpMenuItem.GroupIndex := i_TICKET_CLASS;
+          tmpMenuItem.GroupIndex := 254 ; // i_TICKET_CLASS;
           tmpMenuItem.OnClick := CreateMenuRec^.fTicketRightClick;
           Max_MenuText_Width := Max(Max_MenuText_Width,
             Get_Caption_Length(tmpMenuItem.Caption, CreateMenuRec^.fMenuFont));
@@ -1482,4 +1482,3 @@ finalization
 }
 
 end.
-
