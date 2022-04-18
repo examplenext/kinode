@@ -542,7 +542,12 @@ begin
             sub_idx := 5;
             if (sub_idx < tnt.SubItems.Count) then
             begin
-              tnt.SubItems[sub_idx] := chk_sum;
+              if (vInfo[i].irSpecial > vInfo_Special_Base)
+                or (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Selected) then
+                if (vInfo[i].irCountOnline = 0) then
+                  tnt.SubItems[sub_idx] := ''
+                else
+                  tnt.SubItems[sub_idx] := IntToStr(vInfo[i].irCountOnline);
             end;
             // --------------------------------------------------------------------------
             // —ÛÏÏ‡ online

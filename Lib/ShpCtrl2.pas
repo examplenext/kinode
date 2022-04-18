@@ -2984,6 +2984,15 @@ begin
             Canvas.Pen.Color := FRealizeFontColor;
             // Canvas.Pen.Mode := pmXor;
           end;
+        sfOnline:
+          begin
+            // Rect in corner
+            Canvas.Brush.Color := FReserveBrushColor;
+            Canvas.Pen.Width := 1;
+            Canvas.Pen.Style := psDash;
+            Canvas.Pen.Color := FRealizeFontColor;
+            // Canvas.Pen.Mode := pmXor;
+          end;
       else
         // Rect in corner
         Canvas.Brush.Color := FReserveBrushColor;
