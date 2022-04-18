@@ -160,6 +160,15 @@ begin
   // --------------------------------------------------------------------------
   try
     lc := lv_Info.Columns.Add;
+    lc.Alignment := taRightJustify;
+    // lc.Caption := 'Количество';
+    lc.Caption := 'online';
+    lc.Width := 30;
+  except
+  end;
+  // --------------------------------------------------------------------------
+  try
+    lc := lv_Info.Columns.Add;
     lc.Alignment := taLeftJustify;
     lc.Caption := '###';
     lc.Width := 30;
@@ -523,6 +532,22 @@ begin
             // Контроль
             // --------------------------------------------------------------------------
             sub_idx := 4;
+            if (sub_idx < tnt.SubItems.Count) then
+            begin
+              tnt.SubItems[sub_idx] := chk_sum;
+            end;
+            // --------------------------------------------------------------------------
+            // Кол-во online
+            // --------------------------------------------------------------------------
+            sub_idx := 5;
+            if (sub_idx < tnt.SubItems.Count) then
+            begin
+              tnt.SubItems[sub_idx] := chk_sum;
+            end;
+            // --------------------------------------------------------------------------
+            // Сумма online
+            // --------------------------------------------------------------------------
+            sub_idx := 6;
             if (sub_idx < tnt.SubItems.Count) then
             begin
               tnt.SubItems[sub_idx] := chk_sum;

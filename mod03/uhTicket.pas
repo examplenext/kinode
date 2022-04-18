@@ -1164,7 +1164,7 @@ begin
       try
         sh := High(vInfo) + 1;
         vInfo_count := (High(vInfo) - Low(vInfo) + 1);
-        SetLength(vInfo, vInfo_count + 5);
+        SetLength(vInfo, vInfo_count + 7);
         k := 0;
         // --------------------------------------------------------------------------
         if (Low(vInfo) <= (sh + k)) and ((sh + k) <= High(vInfo)) then
@@ -1227,6 +1227,42 @@ begin
           vInfo[sh + k].irKod := vInfo_Special_Base - vInfo_Special_Cash;
           vInfo[sh + k].irName := 'Итого по наличности';
           vInfo[sh + k].irBgColor := clDkGray;
+          vInfo[sh + k].irFontColor := clBlack;
+          vInfo[sh + k].irbFree := false;
+          vInfo[sh + k].irSpecial := vInfo[sh + k].irKod;
+          vInfo[sh + k].irCost := -1;
+          vInfo[sh + k].irCountCash := -1;
+          vInfo[sh + k].irSumCash := -1;
+        end
+        else
+          DEBUGMessEnh(0, UnitName, ProcName, 'Error: (sh + k) = ' +
+            IntToStr(sh + k) + ' out of vInfo range.');
+        // --------------------------------------------------------------------------
+        Inc(k);
+        if (Low(vInfo) <= (sh + k)) and ((sh + k) <= High(vInfo)) then
+        begin
+          vInfo[sh + k].irLvIdx := -1;
+          vInfo[sh + k].irKod := vInfo_Special_Base - vInfo_Special_Total;
+          vInfo[sh + k].irName := 'Итого по нал/карт';
+          vInfo[sh + k].irBgColor := clWindow;
+          vInfo[sh + k].irFontColor := clBlack;
+          vInfo[sh + k].irbFree := false;
+          vInfo[sh + k].irSpecial := vInfo[sh + k].irKod;
+          vInfo[sh + k].irCost := -1;
+          vInfo[sh + k].irCountCash := -1;
+          vInfo[sh + k].irSumCash := -1;
+        end
+        else
+          DEBUGMessEnh(0, UnitName, ProcName, 'Error: (sh + k) = ' +
+            IntToStr(sh + k) + ' out of vInfo range.');
+        // --------------------------------------------------------------------------
+        Inc(k);
+        if (Low(vInfo) <= (sh + k)) and ((sh + k) <= High(vInfo)) then
+        begin
+          vInfo[sh + k].irLvIdx := -1;
+          vInfo[sh + k].irKod := vInfo_Special_Base - vInfo_Special_Total;
+          vInfo[sh + k].irName := 'Итого по online';
+          vInfo[sh + k].irBgColor := clWindow;
           vInfo[sh + k].irFontColor := clBlack;
           vInfo[sh + k].irbFree := false;
           vInfo[sh + k].irSpecial := vInfo[sh + k].irKod;
