@@ -657,7 +657,7 @@ const
     'Select (Выделение) [ S ]', 'Cancel (Отмена) [ C ]');
   c_SfToStr: array[TSaleForm] of string =
   ('0 - Not paid (Неоплачено)', '1 - Cash (Наличные)', '2 - Credit (Кредитка)',
-    '3 - Cariboo (Карибу)', '4 - Wapiti (Вапити)');
+    '3 - Online (Онлайн)', '4 - Wapiti (Вапити)');
 {$ELSE}
   c_Triplean: array[Triplean] of string =
   ('Неизвестно', 'Нет', 'Да');
@@ -669,7 +669,7 @@ const
     'Снятие брони [ J ]', 'Возврат [ F ]', 'Выделение [ S ]', 'Отмена [ C ]');
   c_SfToStr: array[TSaleForm] of string =
   ('0 - Неоплачено', '1 - Наличные', '2 - Кредитка',
-    '3 - Карибу', '4 - Вапити');
+    '3 - Онлайн', '4 - Вапити');
 {$ENDIF}
   // -------------------------------------------
   c_OperActionPfx: array[TOperAction] of Char =
