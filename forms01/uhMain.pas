@@ -184,6 +184,7 @@ var
     Count_Free, Count_Broken, Count_Prepared, Sum_Prepared,
     Count_Reserved, Sum_Reserved,
     Total_Count_NotPaid,
+    Total_Count_Online, Total_Sum_Online,
     Total_Count_Credit, Total_Sum_Credit,
     Total_Count_Cash, Total_Sum_Cash,
     Total_Count_Cheqed, Total_Sum_Cheqed: Integer;
@@ -209,6 +210,8 @@ begin
   Sum_Reserved := 0;
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Total_Count_NotPaid := 0;
+  Total_Sum_Online := 0;
+  Total_Count_Online := 0;
   Total_Sum_Credit := 0;
   Total_Count_Credit := 0;
   Total_Sum_Cash := 0;
@@ -235,6 +238,8 @@ begin
           vInfo[i].irSumCash := 0;
           vInfo[i].irCountCredit := 0;
           vInfo[i].irSumCredit := 0;
+          vInfo[i].irCountOnline := 0;
+          vInfo[i].irSumOnline := 0;
         end
         else if (vInfo[i].irSpecial > vInfo_Special_Base) then
         begin
@@ -246,6 +251,8 @@ begin
             vInfo[i].irSumCash := 0;
             vInfo[i].irCountCredit := 0;
             vInfo[i].irSumCredit := 0;
+            vInfo[i].irCountOnline := 0;
+            vInfo[i].irSumOnline := 0;
           except
           end;
         end; // if
@@ -345,8 +352,8 @@ begin
                         {
                         c_SfToStr: array[TSaleForm] of string =
                         ('0 - Not paid (Неоплачено)', '1 - Cash (Наличные)', '2 - Credit (Кредитка)',
-                          '3 - Cariboo (Карибу)', '4 - Wapiti (Вапити)');
-                        TSaleForm = (sfNotPaid, sfCash, sfCredit, sfCariboo, sfWapiti);
+                          '3 - Online (Онлайн)', '4 - Wapiti (Вапити)');
+                        TSaleForm = (sfNotPaid, sfCash, sfCredit, sfOnline, sfWapiti);
                         }
                         case ssTmp.SaleForm of
                           sfNotPaid:
@@ -379,8 +386,12 @@ begin
                               Total_Sum_Credit := Total_Sum_Credit + ssTmp.SaleCost;
                               inc(Total_Count_Credit);
                             end; // tsReserved
-                          sfCariboo:
+                          sfOnline:
                             begin
+                              vInfo[i].irCountOnline := vInfo[i].irCountOnline + 1;
+                              vInfo[i].irSumOnline := vInfo[i].irSumOnline + ssTmp.SaleCost;
+                              Total_Sum_Online := Total_Sum_Online + ssTmp.SaleCost;
+                              inc(Total_Count_Online);
                             end; // tsReserved
                           sfWapiti:
                             begin
@@ -460,6 +471,12 @@ begin
         vInfo[i].irCountCash := Total_Count_Cash + Total_Count_Cheqed + Total_Count_Credit +
           Total_Count_NotPaid;
         vInfo[i].irSumCash := Total_Sum_Cash + Total_Sum_Cheqed + Total_Sum_Credit;
+      end;
+      // Итого по онлайн
+      if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Online) then
+      begin
+        vInfo[i].irCountOnline := Total_Count_Online;
+        vInfo[i].irSumOnline := Total_Sum_Online;
       end;
     end; // for i := Low(vInfo) to High(vInfo) do
   end;

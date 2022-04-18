@@ -52,6 +52,8 @@ type
     irSumCash: Integer;
     irCountCredit: Integer;
     irSumCredit: Integer;
+    irCountOnline: Integer;
+    irSumOnline: Integer;
   end;
 
 function Get_Caption_Length(_Text: string; _Font: TFont): Integer;
@@ -77,6 +79,8 @@ const
   vInfo_Special_Credit: Integer = 22;
   vInfo_Special_Cash: Integer = 23;
   vInfo_Special_Total: Integer = 24;
+  vInfo_Special_Online: Integer = 25;
+  vInfo_Special_Allcome: Integer = 26;
 
 var
   vInfo: array of TInfoRec;
@@ -1260,9 +1264,9 @@ begin
         if (Low(vInfo) <= (sh + k)) and ((sh + k) <= High(vInfo)) then
         begin
           vInfo[sh + k].irLvIdx := -1;
-          vInfo[sh + k].irKod := vInfo_Special_Base - vInfo_Special_Total;
+          vInfo[sh + k].irKod := vInfo_Special_Base - vInfo_Special_Online;
           vInfo[sh + k].irName := 'Итого по online';
-          vInfo[sh + k].irBgColor := clWindow;
+          vInfo[sh + k].irBgColor := clBackground;
           vInfo[sh + k].irFontColor := clBlack;
           vInfo[sh + k].irbFree := false;
           vInfo[sh + k].irSpecial := vInfo[sh + k].irKod;
@@ -1278,9 +1282,9 @@ begin
         if (Low(vInfo) <= (sh + k)) and ((sh + k) <= High(vInfo)) then
         begin
           vInfo[sh + k].irLvIdx := -1;
-          vInfo[sh + k].irKod := vInfo_Special_Base - vInfo_Special_Total;
+          vInfo[sh + k].irKod := vInfo_Special_Base - vInfo_Special_Allcome;
           vInfo[sh + k].irName := 'Итого по всем';
-          vInfo[sh + k].irBgColor := clWindow;
+          vInfo[sh + k].irBgColor := clBtnFace;
           vInfo[sh + k].irFontColor := clBlack;
           vInfo[sh + k].irbFree := false;
           vInfo[sh + k].irSpecial := vInfo[sh + k].irKod;

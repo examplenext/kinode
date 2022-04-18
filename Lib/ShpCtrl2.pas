@@ -74,7 +74,7 @@ type
     oaSelect, oaCancel);
   TOperActionEx = (oxUnknown, oxReserve, oxSale, oxActualize, oxModify, oxFree, oxRestore,
     oxSelect, oxCancel, oxPrepare);
-  TSaleForm = (sfNotPaid, sfCash, sfCredit, sfCariboo, sfWapiti);
+  TSaleForm = (sfNotPaid, sfCash, sfCredit, sfOnline, sfWapiti);
 
   PSXInfo = ^TSXInfo;
 
@@ -686,7 +686,7 @@ const
   (200, 201, 202, 203, 204, 205, 206, 207, 208, 209);
   // -------------------------------------------
   c_IntToSf: array[0..4] of TSaleForm =
-  (sfNotPaid, sfCash, sfCredit, sfCariboo, sfWapiti);
+  (sfNotPaid, sfCash, sfCredit, sfOnline, sfWapiti);
   c_SfToInt: array[TSaleForm] of Integer =
   (0, 1, 2, 3, 4);
   // -------------------------------------------
