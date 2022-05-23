@@ -143,7 +143,7 @@ begin
   // --------------------------------------------------------------------------
   try
     lc := lv_Info.Columns.Add;
-    lc.Alignment := taRightJustify;
+    lc.Alignment := taLeftJustify;
     lc.Caption := 'Сумма';
     lc.Width := 60;
   except
@@ -160,6 +160,15 @@ begin
   // --------------------------------------------------------------------------
   try
     lc := lv_Info.Columns.Add;
+    lc.Alignment := taLeftJustify;
+    // lc.Caption := 'Сумма';
+    lc.Caption := 'POS-терм_SUM';
+    lc.Width := 60;
+  except
+  end;
+  // --------------------------------------------------------------------------
+  try
+    lc := lv_Info.Columns.Add;
     lc.Alignment := taRightJustify;
     // lc.Caption := 'Количество';
     lc.Caption := 'online';
@@ -170,8 +179,9 @@ begin
   try
     lc := lv_Info.Columns.Add;
     lc.Alignment := taLeftJustify;
-    lc.Caption := '###';
-    lc.Width := 30;
+    //lc.Caption := '###';
+    lc.Caption := 'online_SUM';
+    lc.Width := 60;
   except
   end;
   // --------------------------------------------------------------------------
@@ -420,11 +430,11 @@ end;
 
 procedure Tfm_Info.UpdateTicketInfo(vFoo: Boolean);
 const
-  ProcName: string = 'LoadTicketInfo';
+  ProcName: string = 'UpdateTicketInfo';
 var
   tnt: TListItem;
   i, item_idx, sub_idx: Integer;
-  chk_sum, str_sum: string;
+  chk_sum, str_sum, str_sum_credit, str_sum_online: string;
 begin
 {$IFDEF Debug_Level_5}
   DEBUGMessEnh(1, UnitName, ProcName, '->');
@@ -451,24 +461,27 @@ begin
           if (0 <= item_idx) and (item_idx < lv_Info.Items.Count) then
           try
             tnt := lv_Info.Items[item_idx];
-            chk_sum := '---';
+            chk_sum := '--a';
             if (vInfo[i].irSpecial > vInfo_Special_Base) then
-              if ((vInfo[i].irSumCash + vInfo[i].irSumCredit) <>
-                (vInfo[i].irCost * (vInfo[i].irCountCash + vInfo[i].irCountCredit))) then
+              if ((vInfo[i].irSumCash + vInfo[i].irSumCredit + vInfo[i].irSumOnline) <>
+                (vInfo[i].irCost * (vInfo[i].irCountCash + vInfo[i].irCountCredit + vInfo[i].irSumOnline))) then
                 chk_sum := '*'
               else
                 chk_sum := '';
             if (vInfo[i].irSumCash = -1) and (vInfo[i].irSpecial < vInfo_Special_Base) then
               str_sum := '---'
-            else if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Total) then
-              str_sum := '---'
+            //else if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Total) then
+            //  str_sum := '---'
             else if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Reserved) then
               str_sum := '---'
             else
               str_sum := IntToStr(vInfo[i].irSumCash);
+              str_sum_credit := IntToStr(vInfo[i].irSumCredit);
+              str_sum_online := IntToStr(vInfo[i].irSumOnline);
 {$IFDEF Debug_Level_6}
             // tnt.Caption := tnt.Caption + '+';
-            DEBUGMessEnh(0, UnitName, ProcName, 'Caption = ' + tnt.Caption + ', Sum ' + str_sum);
+            DEBUGMessEnh(0, UnitName, ProcName, 'Caption = ' + tnt.Caption + ', Sum_Cash ' + str_sum +
+            ', Sum_Cred ' + str_sum_credit + ', Sum_Online ' + str_sum_online);
 {$ENDIF}
             // --------------------------------------------------------------------------
             // Цена
@@ -491,13 +504,13 @@ begin
               if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Reserved) or
                 (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Skiped) then
               begin
-                if (vInfo[i].irCountCash + vInfo[i].irCountCredit = 0) then
+                if (vInfo[i].irCountCash + vInfo[i].irCountCredit + vInfo[i].irCountOnline = 0) then
                   tnt.SubItems[sub_idx] := '---'
                 else
-                  tnt.SubItems[sub_idx] := IntToStr(vInfo[i].irCountCash)
+                  tnt.SubItems[sub_idx] := '*' + IntToStr(vInfo[i].irCountCash)
               end
               else
-                tnt.SubItems[sub_idx] := IntToStr(vInfo[i].irCountCash);
+                tnt.SubItems[sub_idx] := '' + IntToStr(vInfo[i].irCountCash);
             end;
             // --------------------------------------------------------------------------
             // Сумма наличными
@@ -507,14 +520,14 @@ begin
             begin
               if (str_sum = '0') then
               begin
-                if (vInfo[i].irCountCash + vInfo[i].irCountCredit = 0) then
+                if (vInfo[i].irCountCash + vInfo[i].irCountCredit + vInfo[i].irCountOnline = 0) then
                   tnt.SubItems[sub_idx] := ''
                 else
                   tnt.SubItems[sub_idx] := '+';
               end
               else
                 tnt.SubItems[sub_idx] := str_sum;
-            end;
+           end;
             // --------------------------------------------------------------------------
             // Кол-во безналом
             // --------------------------------------------------------------------------
@@ -529,13 +542,30 @@ begin
                   tnt.SubItems[sub_idx] := IntToStr(vInfo[i].irCountCredit);
             end;
             // --------------------------------------------------------------------------
-            // Контроль
+            // Сумма безналом
             // --------------------------------------------------------------------------
             sub_idx := 4;
             if (sub_idx < tnt.SubItems.Count) then
             begin
-              tnt.SubItems[sub_idx] := chk_sum;
+              if (str_sum_credit = '0') then
+              begin
+                if (vInfo[i].irCountCash + vInfo[i].irCountCredit + vInfo[i].irCountOnline = 0) then
+                  tnt.SubItems[sub_idx] := ''
+                else
+                  tnt.SubItems[sub_idx] := '+';
+              end
+              else
+                tnt.SubItems[sub_idx] := str_sum_credit;
             end;
+
+            // --------------------------------------------------------------------------
+            // Контроль
+            // --------------------------------------------------------------------------
+            //sub_idx := 4;
+            //if (sub_idx < tnt.SubItems.Count) then
+            //begin
+            //  tnt.SubItems[sub_idx] := chk_sum;
+            //end;
             // --------------------------------------------------------------------------
             // Кол-во online
             // --------------------------------------------------------------------------
@@ -555,14 +585,25 @@ begin
             sub_idx := 6;
             if (sub_idx < tnt.SubItems.Count) then
             begin
-              tnt.SubItems[sub_idx] := chk_sum;
+              if (str_sum_online = '0') then
+              begin
+                if (vInfo[i].irCountCash + vInfo[i].irCountCredit + vInfo[i].irCountOnline = 0) then
+                  tnt.SubItems[sub_idx] := ''
+                else
+                  tnt.SubItems[sub_idx] := '+';
+              end
+              else
+                tnt.SubItems[sub_idx] := str_sum_online;
             end;
             // --------------------------------------------------------------------------
             // Уфсе
             // --------------------------------------------------------------------------
             // sub_idx := 5;
           except
-            // todo: do anything here
+          {$IFDEF Debug_Level_5}
+            DEBUGMessEnh(0, UnitName, ProcName, '...except...');
+          {$ENDIF}
+          // todo: do anything here
           end;
           // --------------------------------------------------------------------------
         end; // if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Delim) then

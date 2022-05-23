@@ -1,11 +1,11 @@
 object fm_Info: Tfm_Info
-  Left = 637
-  Top = 154
+  Left = 572
+  Top = 220
   AutoScroll = False
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Информация'
-  ClientHeight = 191
-  ClientWidth = 387
+  ClientHeight = 300
+  ClientWidth = 442
   Color = clBtnFace
   Constraints.MaxHeight = 600
   Constraints.MaxWidth = 450
@@ -30,8 +30,8 @@ object fm_Info: Tfm_Info
   object pnInfo: TPanel
     Left = 0
     Top = 0
-    Width = 397
-    Height = 172
+    Width = 442
+    Height = 281
     Align = alClient
     BevelOuter = bvLowered
     Caption = 'pnInfo'
@@ -39,8 +39,8 @@ object fm_Info: Tfm_Info
     object lv_Info: TListView
       Left = 1
       Top = 1
-      Width = 395
-      Height = 170
+      Width = 440
+      Height = 279
       Align = alClient
       Columns = <
         item
@@ -69,7 +69,7 @@ object fm_Info: Tfm_Info
         end
         item
           Caption = '###'
-          Width = 30
+          Width = 60
         end>
       GridLines = True
       IconOptions.Arrangement = iaLeft
@@ -93,8 +93,8 @@ object fm_Info: Tfm_Info
   end
   object sbarInfo: TStatusBar
     Left = 0
-    Top = 172
-    Width = 387
+    Top = 281
+    Width = 442
     Height = 19
     Panels = <
       item
