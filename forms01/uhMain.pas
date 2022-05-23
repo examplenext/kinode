@@ -465,7 +465,7 @@ begin
         vInfo[i].irCountCash := Total_Count_Cash + Total_Count_Cheqed;
         vInfo[i].irSumCash := Total_Sum_Cash + Total_Sum_Cheqed;
       end;
-      // Итого по всем
+      // Итого по нал и постерминал
       if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Total) then
       begin
         vInfo[i].irCountCash := Total_Count_Cash + Total_Count_Cheqed + Total_Count_Credit +
@@ -475,8 +475,15 @@ begin
       // Итого по онлайн
       if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Online) then
       begin
-        vInfo[i].irCountOnline := Total_Count_Online;
-        vInfo[i].irSumOnline := Total_Sum_Online;
+        vInfo[i].irCountCash := Total_Count_Online;
+        vInfo[i].irSumCash :=  Total_Sum_Online;
+      end;
+      // Итого по всем
+      if (vInfo[i].irSpecial = vInfo_Special_Base - vInfo_Special_Allcome) then
+      begin
+        vInfo[i].irCountCash := Total_Count_Cash + Total_Count_Cheqed + Total_Count_Credit +
+          Total_Count_NotPaid + Total_Count_Online;
+        vInfo[i].irSumCash := Total_Sum_Cash + Total_Sum_Cheqed + Total_Sum_Credit + Total_Sum_Online;
       end;
     end; // for i := Low(vInfo) to High(vInfo) do
   end;

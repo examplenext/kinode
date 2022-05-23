@@ -1,5 +1,5 @@
 object fm_Info: Tfm_Info
-  Left = 572
+  Left = 573
   Top = 220
   AutoScroll = False
   BorderIcons = [biSystemMenu, biMaximize]
