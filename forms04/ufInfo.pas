@@ -651,11 +651,13 @@ begin
     ssMinSize, ssMediumSize:
       begin
         Height := Constraints.MaxHeight;
+        Width := Constraints.MaxWidth;
         FSizeState := ssMaxSize;
       end;
     ssMaxSize:
       begin
         Height := Constraints.MinHeight;
+        Width := Constraints.MinWidth;
         FSizeState := ssMinSize;
       end;
   end; // case
