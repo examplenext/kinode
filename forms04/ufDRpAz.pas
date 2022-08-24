@@ -23,7 +23,8 @@ type
     pn_Top: TPanel;
     gb_Edit: TGroupBox;
     lbl_1st: TLabel;
-    dtp_Date_Filt: TDateTimePicker;
+    dtp_Date_Filt_Start: TDateTimePicker;
+    dtp_Date_Filt_Finish: TDateTimePicker;
     sb_Up: TSpeedButton;
     sb_Down: TSpeedButton;
     sb_Today: TSpeedButton;
@@ -137,10 +138,10 @@ end;
 
 procedure Tfm_DRpAz.sb_UpClick(Sender: TObject);
 begin
-  if dtp_Date_Filt.Enabled then
+  if dtp_Date_Filt_Start.Enabled then
   begin
-    dtp_Date_Filt.Date := dtp_Date_Filt.Date + 1;
-    dtp_Date_Filt.OnChange(Self);
+    dtp_Date_Filt_Start.Date := dtp_Date_Filt_Start.Date + 1;
+    dtp_Date_Filt_Start.OnChange(Self);
   end;
 end;
 
@@ -159,8 +160,9 @@ begin
   // --------------------------------------------------------------------------
   FNotYetActivated := true;
   // --------------------------------------------------------------------------
-  dtp_Date_Filt.Date := pm_Repert_Date;
-  cv_Repert_Date := dtp_Date_Filt.Date;
+  dtp_Date_Filt_Start.Date := pm_Repert_Date;
+  dtp_Date_Filt_Finish.Date := pm_Repert_Date;
+  cv_Repert_Date := dtp_Date_Filt_Start.Date;
   // --------------------------------------------------------------------------
   if (cmb_Report_Mode.Items.Count > 0) then
     cmb_Report_Mode.ItemIndex := 0;
@@ -221,19 +223,19 @@ end;
 
 procedure Tfm_DRpAz.sb_DownClick(Sender: TObject);
 begin
-  if dtp_Date_Filt.Enabled then
+  if dtp_Date_Filt_Start.Enabled then
   begin
-    dtp_Date_Filt.Date := dtp_Date_Filt.Date - 1;
-    dtp_Date_Filt.OnChange(Self);
+    dtp_Date_Filt_Start.Date := dtp_Date_Filt_Start.Date - 1;
+    dtp_Date_Filt_Start.OnChange(Self);
   end;
 end;
 
 procedure Tfm_DRpAz.sb_TodayClick(Sender: TObject);
 begin
-  if dtp_Date_Filt.Enabled then
+  if dtp_Date_Filt_Start.Enabled then
   begin
-    dtp_Date_Filt.Date := Now;
-    dtp_Date_Filt.OnChange(Self);
+    dtp_Date_Filt_Start.Date := Now;
+    dtp_Date_Filt_Start.OnChange(Self);
   end;
 end;
 
@@ -244,6 +246,7 @@ var
   OldCursor: TCursor;
   Report_Mode: Integer;
   Odeum_Kod: Integer;
+  str_IN_FILT_DATE_START, str_IN_FILT_DATE_FINISH: string;
   s: string;
 begin
   DEBUGMessEnh(1, UnitName, ProcName, '->');
@@ -325,7 +328,8 @@ begin
   OldCursor := Screen.Cursor;
   try
     Screen.Cursor := crSQLWait;
-    dtp_Date_Filt.Enabled := false;
+    dtp_Date_Filt_Start.Enabled := false;
+    dtp_Date_Filt_Finish.Enabled := false;
     dbcm_Zal.Enabled := false;
     cmb_Report_Mode.Enabled := false;
     sb_Up.Enabled := false;
@@ -408,34 +412,71 @@ begin
               DEBUGMessEnh(0, UnitName, ProcName, s_IN_FILT_ODEUM + ' param not found.');
             // ------------
             cv_Repert_Date := Now;
+            str_IN_FILT_DATE_START := '';
+            str_IN_FILT_DATE_FINISH := '';
             if Assigned(Params.FindParam(s_IN_FILT_DATE)) then
+              str_IN_FILT_DATE_START := s_IN_FILT_DATE;
+            if Assigned(Params.FindParam(s_IN_FILT_DATE_START)) then
+              str_IN_FILT_DATE_START := s_IN_FILT_DATE_START;
+            if Assigned(Params.FindParam(s_IN_FILT_DATE_FINISH)) then
+              str_IN_FILT_DATE_FINISH := s_IN_FILT_DATE_FINISH;
+            if Len(str_IN_FILT_DATE_START) <> 0 then
             begin
-              ParamByName(s_IN_FILT_DATE).AsVariant := Null;
+              ParamByName(str_IN_FILT_DATE_START).AsVariant := Null;
               case Report_Mode of
                 0:
                   begin
-                    ParamByName(s_IN_FILT_DATE).AsDate := dtp_Date_Filt.Date;
-                    cv_Repert_Date := dtp_Date_Filt.Date;
+                    ParamByName(str_IN_FILT_DATE_START).AsDate := dtp_Date_Filt_Start.Date;
+                    cv_Repert_Date := dtp_Date_Filt_Start.Date;
                   end;
                 1:
                   begin
-                    ParamByName(s_IN_FILT_DATE).AsDate := Cur_Date;
+                    ParamByName(str_IN_FILT_DATE_START).AsDate := Cur_Date;
                     cv_Repert_Date := Cur_Date;
                   end;
               else
                 // foo
               end;
               s := '<null>';
-              if not ParamByName(s_IN_FILT_DATE).IsNull then
+              if not ParamByName(str_IN_FILT_DATE_START).IsNull then
               try
-                s := ParamByName(s_IN_FILT_DATE).AsString;
+                s := ParamByName(str_IN_FILT_DATE_START).AsString;
               except
                 s := '<error>';
               end;
-              DEBUGMessEnh(0, UnitName, ProcName, s_IN_FILT_DATE + ' = (' + s + ')');
+              DEBUGMessEnh(0, UnitName, ProcName, str_IN_FILT_DATE_START + ' = (' + s + ')');
             end
             else
-              DEBUGMessEnh(0, UnitName, ProcName, s_IN_FILT_DATE + ' param not found.');
+              DEBUGMessEnh(0, UnitName, ProcName, str_IN_FILT_DATE_START + ' param not found.');
+            // ------------
+            if Len(str_IN_FILT_DATE_FINISH) <> 0 then
+            begin
+              ParamByName(str_IN_FILT_DATE_FINISH).AsVariant := Null;
+              case Report_Mode of
+                0:
+                  begin
+                    ParamByName(str_IN_FILT_DATE_FINISH).AsDate := dtp_Date_Filt_Start.Date;
+                    cv_Repert_Date := dtp_Date_Filt_Start.Date;
+                  end;
+                1:
+                  begin
+                    ParamByName(str_IN_FILT_DATE_FINISH).AsDate := Cur_Date;
+                    cv_Repert_Date := Cur_Date;
+                  end;
+              else
+                // foo
+              end;
+              s := '<null>';
+              if not ParamByName(str_IN_FILT_DATE_FINISH).IsNull then
+              try
+                s := ParamByName(str_IN_FILT_DATE_FINISH).AsString;
+              except
+                s := '<error>';
+              end;
+              DEBUGMessEnh(0, UnitName, ProcName, str_IN_FILT_DATE_FINISH + ' = (' + s + ')');
+            end
+            else
+              DEBUGMessEnh(0, UnitName, ProcName, str_IN_FILT_DATE_FINISH + ' param not found.');
             // ------------
             if Assigned(Params.FindParam(s_IN_SESSION_ID)) then
             begin
@@ -506,8 +547,8 @@ begin
               case Report_Mode of
                 0:
                   begin
-                    ParamByName(s_IN_FILT_DATE).AsDate := dtp_Date_Filt.Date;
-                    cv_Repert_Date := dtp_Date_Filt.Date;
+                    ParamByName(s_IN_FILT_DATE).AsDate := dtp_Date_Filt_Start.Date;
+                    cv_Repert_Date := dtp_Date_Filt_Start.Date;
                   end;
                 1:
                   begin
@@ -524,6 +565,7 @@ begin
               except
                 s := '<error>';
               end;
+              DEBUGMessEnh(0, UnitName, ProcName, s_IN_FILT_DATE + ' = (' + s + ')');
               DEBUGMessEnh(0, UnitName, ProcName, s_IN_FILT_DATE + ' = (' + s + ')');
             end;
             // ------------
@@ -570,12 +612,14 @@ begin
     case Report_Mode of
       0:
         begin
-          dtp_Date_Filt.Enabled := true;
+          dtp_Date_Filt_Start.Enabled := true;
+          dtp_Date_Filt_Finish.Enabled := true;
           dbcm_Zal.Enabled := true;
         end;
       1:
         begin
-          dtp_Date_Filt.Enabled := false;
+          dtp_Date_Filt_Start.Enabled := false;
+          dtp_Date_Filt_Finish.Enabled := false;
           dbcm_Zal.Enabled := false;
         end;
     else
@@ -855,7 +899,7 @@ begin
       end; // try
     end; // if
   // --------------------------------------------------------------------------
-  dtp_Date_Filt.Date := pm_Repert_Date;
+  dtp_Date_Filt_Start.Date := pm_Repert_Date;
   with dbcm_Zal do
     if Items.Count > 0 then
     begin

@@ -238,7 +238,7 @@ object fm_DRpAz: Tfm_DRpAz
         OnClick = sb_TodayClick
       end
       object lbl_Zal: TLabel
-        Left = 208
+        Left = 358
         Top = 16
         Width = 23
         Height = 13
@@ -251,7 +251,7 @@ object fm_DRpAz: Tfm_DRpAz
         Font.Style = [fsBold]
         ParentFont = False
       end
-      object dtp_Date_Filt: TDateTimePicker
+      object dtp_Date_Filt_Start: TDateTimePicker
         Left = 8
         Top = 40
         Width = 113
@@ -267,7 +267,7 @@ object fm_DRpAz: Tfm_DRpAz
         OnChange = PrepReport
       end
       object dbcm_Zal: TComboBox
-        Left = 168
+        Left = 318
         Top = 40
         Width = 249
         Height = 21
@@ -275,21 +275,21 @@ object fm_DRpAz: Tfm_DRpAz
         Anchors = [akLeft, akTop, akRight]
         DropDownCount = 9
         ItemHeight = 13
-        TabOrder = 1
+        TabOrder = 3
         OnChange = PrepReport
       end
       object cmb_Report_Mode: TComboBox
-        Left = 429
+        Left = 579
         Top = 40
         Width = 185
         Height = 21
         Style = csDropDownList
         Anchors = [akTop, akRight]
         ItemHeight = 13
-        TabOrder = 2
+        TabOrder = 4
         OnChange = PrepReport
         Items.Strings = (
-          'Выбранная дата'
+          'Выбранный период дат'
           'Открытый день')
       end
       object bt_ShowReport: TBitBtn
@@ -300,7 +300,7 @@ object fm_DRpAz: Tfm_DRpAz
         Action = DTPreview
         Caption = '&Просмотр'
         Default = True
-        TabOrder = 3
+        TabOrder = 2
         Glyph.Data = {
           DE010000424DDE01000000000000760000002800000024000000120000000100
           0400000000006801000000000000000000001000000000000000000000000000
@@ -326,7 +326,7 @@ object fm_DRpAz: Tfm_DRpAz
         Width = 97
         Height = 25
         Caption = 'Об&новить'
-        TabOrder = 4
+        TabOrder = 5
         OnClick = bt_RefreshClick
         Glyph.Data = {
           DE010000424DDE01000000000000760000002800000024000000120000000100
@@ -346,6 +346,21 @@ object fm_DRpAz: Tfm_DRpAz
           3333333333338888883333330000333333333333333333333333333333333333
           0000}
         NumGlyphs = 2
+      end
+      object dtp_Date_Filt_Finish: TDateTimePicker
+        Left = 168
+        Top = 40
+        Width = 113
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 37508.3727099074
+        Time = 37508.3727099074
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+        OnChange = PrepReport
       end
     end
   end
