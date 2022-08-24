@@ -25,9 +25,12 @@ type
     lbl_1st: TLabel;
     dtp_Date_Filt_Start: TDateTimePicker;
     dtp_Date_Filt_Finish: TDateTimePicker;
-    sb_Up: TSpeedButton;
-    sb_Down: TSpeedButton;
-    sb_Today: TSpeedButton;
+    sb_Up_Start: TSpeedButton;
+    sb_Down_Start: TSpeedButton;
+    sb_Today_Start: TSpeedButton;
+    sb_Up_Finish: TSpeedButton;
+    sb_Down_Finish: TSpeedButton;
+    sb_Today_Finish: TSpeedButton;
     lbl_Zal: TLabel;
     dbcm_Zal: TComboBox;
     cmb_Report_Mode: TComboBox;
@@ -65,9 +68,12 @@ type
     frRTFExport1: TfrRTFExport;
     frCSVExport1: TfrCSVExport;
     frHTMExport1: TfrHTMExport;
-    procedure sb_DownClick(Sender: TObject);
-    procedure sb_TodayClick(Sender: TObject);
-    procedure sb_UpClick(Sender: TObject);
+    procedure sb_Up_StartClick(Sender: TObject);
+    procedure sb_Down_StartClick(Sender: TObject);
+    procedure sb_Today_StartClick(Sender: TObject);
+    procedure sb_Up_FinishClick(Sender: TObject);
+    procedure sb_Down_FinishClick(Sender: TObject);
+    procedure sb_Today_FinishClick(Sender: TObject);
     procedure bt_CloseClick(Sender: TObject);
     procedure bt_RefreshClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -136,12 +142,21 @@ begin
   DEBUGMessBrk(-1, ')   <<< [' + UnitName + '::' + ProcName + '] <<<   (');
 end;
 
-procedure Tfm_DRpAz.sb_UpClick(Sender: TObject);
+procedure Tfm_DRpAz.sb_Up_StartClick(Sender: TObject);
 begin
   if dtp_Date_Filt_Start.Enabled then
   begin
     dtp_Date_Filt_Start.Date := dtp_Date_Filt_Start.Date + 1;
     dtp_Date_Filt_Start.OnChange(Self);
+  end;
+end;
+
+procedure Tfm_DRpAz.sb_Up_FinishClick(Sender: TObject);
+begin
+  if dtp_Date_Filt_Finish.Enabled then
+  begin
+    dtp_Date_Filt_Finish.Date := dtp_Date_Filt_Finish.Date + 1;
+    dtp_Date_Filt_Finish.OnChange(Self);
   end;
 end;
 
@@ -221,7 +236,7 @@ begin
   DEBUGMessEnh(-1, UnitName, ProcName, '<-');
 end;
 
-procedure Tfm_DRpAz.sb_DownClick(Sender: TObject);
+procedure Tfm_DRpAz.sb_Down_StartClick(Sender: TObject);
 begin
   if dtp_Date_Filt_Start.Enabled then
   begin
@@ -230,12 +245,30 @@ begin
   end;
 end;
 
-procedure Tfm_DRpAz.sb_TodayClick(Sender: TObject);
+procedure Tfm_DRpAz.sb_Down_FinishClick(Sender: TObject);
+begin
+  if dtp_Date_Filt_Finish.Enabled then
+  begin
+    dtp_Date_Filt_Finish.Date := dtp_Date_Filt_Finish.Date - 1;
+    dtp_Date_Filt_Finish.OnChange(Self);
+  end;
+end;
+
+procedure Tfm_DRpAz.sb_Today_StartClick(Sender: TObject);
 begin
   if dtp_Date_Filt_Start.Enabled then
   begin
     dtp_Date_Filt_Start.Date := Now;
     dtp_Date_Filt_Start.OnChange(Self);
+  end;
+end;
+
+procedure Tfm_DRpAz.sb_Today_FinishClick(Sender: TObject);
+begin
+  if dtp_Date_Filt_Finish.Enabled then
+  begin
+    dtp_Date_Filt_Finish.Date := Now;
+    dtp_Date_Filt_Finish.OnChange(Self);
   end;
 end;
 
@@ -332,9 +365,12 @@ begin
     dtp_Date_Filt_Finish.Enabled := false;
     dbcm_Zal.Enabled := false;
     cmb_Report_Mode.Enabled := false;
-    sb_Up.Enabled := false;
-    sb_Down.Enabled := false;
-    sb_Today.Enabled := false;
+    sb_Up_Start.Enabled := false;
+    sb_Down_Start.Enabled := false;
+    sb_Today_Start.Enabled := false;
+    sb_Up_Finish.Enabled := false;
+    sb_Down_Finish.Enabled := false;
+    sb_Today_Finish.Enabled := false;
     // --------------------------------------------------------------------------
     if (dsrc_Master.DataSet is TpFIBDataSet) and (dsrc_Abonem.DataSet is TpFIBDataSet) then
     begin
@@ -420,7 +456,7 @@ begin
               str_IN_FILT_DATE_START := s_IN_FILT_DATE_START;
             if Assigned(Params.FindParam(s_IN_FILT_DATE_FINISH)) then
               str_IN_FILT_DATE_FINISH := s_IN_FILT_DATE_FINISH;
-            if Len(str_IN_FILT_DATE_START) <> 0 then
+            if Length(str_IN_FILT_DATE_START) <> 0 then
             begin
               ParamByName(str_IN_FILT_DATE_START).AsVariant := Null;
               case Report_Mode of
@@ -449,13 +485,13 @@ begin
             else
               DEBUGMessEnh(0, UnitName, ProcName, str_IN_FILT_DATE_START + ' param not found.');
             // ------------
-            if Len(str_IN_FILT_DATE_FINISH) <> 0 then
+            if Length(str_IN_FILT_DATE_FINISH) <> 0 then
             begin
               ParamByName(str_IN_FILT_DATE_FINISH).AsVariant := Null;
               case Report_Mode of
                 0:
                   begin
-                    ParamByName(str_IN_FILT_DATE_FINISH).AsDate := dtp_Date_Filt_Start.Date;
+                    ParamByName(str_IN_FILT_DATE_FINISH).AsDate := dtp_Date_Filt_Finish.Date;
                     cv_Repert_Date := dtp_Date_Filt_Start.Date;
                   end;
                 1:
@@ -626,9 +662,12 @@ begin
       // foo
     end;
     cmb_Report_Mode.Enabled := true;
-    sb_Up.Enabled := true;
-    sb_Down.Enabled := true;
-    sb_Today.Enabled := true;
+    sb_Up_Start.Enabled := true;
+    sb_Down_Start.Enabled := true;
+    sb_Today_Start.Enabled := true;
+    sb_Up_Finish.Enabled := true;
+    sb_Down_Finish.Enabled := true;
+    sb_Today_Finish.Enabled := true;
     DTStatusBarClick(Sender);
     Screen.Cursor := OldCursor;
   end;
@@ -900,6 +939,7 @@ begin
     end; // if
   // --------------------------------------------------------------------------
   dtp_Date_Filt_Start.Date := pm_Repert_Date;
+  dtp_Date_Filt_Finish.Date := pm_Repert_Date;
   with dbcm_Zal do
     if Items.Count > 0 then
     begin
