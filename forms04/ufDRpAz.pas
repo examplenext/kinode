@@ -114,7 +114,8 @@ const
   UnitName: string = 'ufDRpAz';
 
 var
-  cv_Repert_Date: TDateTime;
+  cv_Repert_Date_Start: TDateTime;
+  cv_Repert_Date_Finish: TDateTime;
   // cv_Repert_Odeum: Integer;
 
 procedure acDRpAzShowModal(v_Repert_Date: TDateTime; v_Repert_Odeum: Integer);
@@ -177,7 +178,8 @@ begin
   // --------------------------------------------------------------------------
   dtp_Date_Filt_Start.Date := pm_Repert_Date;
   dtp_Date_Filt_Finish.Date := pm_Repert_Date;
-  cv_Repert_Date := dtp_Date_Filt_Start.Date;
+  cv_Repert_Date_Start := dtp_Date_Filt_Start.Date;
+  cv_Repert_Date_Finish := dtp_Date_Filt_Finish.Date;
   // --------------------------------------------------------------------------
   if (cmb_Report_Mode.Items.Count > 0) then
     cmb_Report_Mode.ItemIndex := 0;
@@ -297,9 +299,13 @@ begin
     ODM.ODEUM_CAPACITY,
     ODM.ODEUM_DESC,
     ODM.CINEMA_LOGO,
-    ODM.ODEUM_LOGO
+    ODM.ODEUM_LOGO,
+    ODM.FOO_DATE
   from
-    SP_ODEUM_RF(:IN_FILT_ODEUM) ODM
+    SP_ODEUM_RF (
+      :IN_FILT_ODEUM,
+      :IN_FILT_DATE,
+      :IN_FILT_DATE_FINISH) ODM
   // --------------------------------------------------------------------------
   // dsrc_Detail - ds_Rep_Daily_Repert
   // --------------------------------------------------------------------------
@@ -330,7 +336,8 @@ begin
     SP_REPERT_RF(
       :IN_FILT_REPERT_ODEUM,
       null,
-      :IN_FILT_REPERT_DATE,
+      :IN_FILT_REPERT_DATE_START,
+      :IN_FILT_REPERT_DATE_FINISH,
       null,
       :IN_SESSION_ID) RPT
   // --------------------------------------------------------------------------
@@ -352,7 +359,8 @@ begin
     AJN.TOTAL_ABJNL_SUM
   from RP_ABJNL_C (
     :IN_REPORT_MODE,
-    :IN_FILT_DATE,
+    :IN_FILT_DATE_START,
+    :IN_FILT_DATE_FINISH,
     :IN_SESSION_ID) AJN
   // --------------------------------------------------------------------------
   }
@@ -447,7 +455,8 @@ begin
             else
               DEBUGMessEnh(0, UnitName, ProcName, s_IN_FILT_ODEUM + ' param not found.');
             // ------------
-            cv_Repert_Date := Now;
+            cv_Repert_Date_Start := Now;
+            cv_Repert_Date_Finish := Now;
             str_IN_FILT_DATE_START := '';
             str_IN_FILT_DATE_FINISH := '';
             if Assigned(Params.FindParam(s_IN_FILT_DATE)) then
@@ -456,6 +465,20 @@ begin
               str_IN_FILT_DATE_START := s_IN_FILT_DATE_START;
             if Assigned(Params.FindParam(s_IN_FILT_DATE_FINISH)) then
               str_IN_FILT_DATE_FINISH := s_IN_FILT_DATE_FINISH;
+            case Report_Mode of
+              0:
+                begin
+                  cv_Repert_Date_Start := dtp_Date_Filt_Start.Date;
+                  cv_Repert_Date_Finish := dtp_Date_Filt_Finish.Date;
+                end;
+              1:
+                begin
+                  cv_Repert_Date_Start := Cur_Date;
+                  cv_Repert_Date_Finish := Cur_Date;
+                end;
+            else
+              // foo
+            end;
             if Length(str_IN_FILT_DATE_START) <> 0 then
             begin
               ParamByName(str_IN_FILT_DATE_START).AsVariant := Null;
@@ -463,12 +486,10 @@ begin
                 0:
                   begin
                     ParamByName(str_IN_FILT_DATE_START).AsDate := dtp_Date_Filt_Start.Date;
-                    cv_Repert_Date := dtp_Date_Filt_Start.Date;
                   end;
                 1:
                   begin
                     ParamByName(str_IN_FILT_DATE_START).AsDate := Cur_Date;
-                    cv_Repert_Date := Cur_Date;
                   end;
               else
                 // foo
@@ -492,12 +513,10 @@ begin
                 0:
                   begin
                     ParamByName(str_IN_FILT_DATE_FINISH).AsDate := dtp_Date_Filt_Finish.Date;
-                    cv_Repert_Date := dtp_Date_Filt_Start.Date;
                   end;
                 1:
                   begin
                     ParamByName(str_IN_FILT_DATE_FINISH).AsDate := Cur_Date;
-                    cv_Repert_Date := Cur_Date;
                   end;
               else
                 // foo
@@ -576,34 +595,81 @@ begin
                 IntToStr(Report_Mode) + ')');
             end;
             // ------------
-            cv_Repert_Date := Now;
+            cv_Repert_Date_Start := Now;
+            cv_Repert_Date_Finish := Now;
+            str_IN_FILT_DATE_START := '';
+            str_IN_FILT_DATE_FINISH := '';
             if Assigned(Params.FindParam(s_IN_FILT_DATE)) then
+              str_IN_FILT_DATE_START := s_IN_FILT_DATE;
+            if Assigned(Params.FindParam(s_IN_FILT_DATE_START)) then
+              str_IN_FILT_DATE_START := s_IN_FILT_DATE_START;
+            if Assigned(Params.FindParam(s_IN_FILT_DATE_FINISH)) then
+              str_IN_FILT_DATE_FINISH := s_IN_FILT_DATE_FINISH;
+            case Report_Mode of
+              0:
+                begin
+                  cv_Repert_Date_Start := dtp_Date_Filt_Start.Date;
+                  cv_Repert_Date_Finish := dtp_Date_Filt_Finish.Date;
+                end;
+              1:
+                begin
+                  cv_Repert_Date_Start := Cur_Date;
+                  cv_Repert_Date_Finish := Cur_Date;
+                end;
+            else
+              // foo
+            end;
+            if Length(str_IN_FILT_DATE_START) <> 0 then
             begin
-              ParamByName(s_IN_FILT_DATE).AsVariant := Null;
+              ParamByName(str_IN_FILT_DATE_START).AsVariant := Null;
               case Report_Mode of
                 0:
                   begin
-                    ParamByName(s_IN_FILT_DATE).AsDate := dtp_Date_Filt_Start.Date;
-                    cv_Repert_Date := dtp_Date_Filt_Start.Date;
+                    ParamByName(str_IN_FILT_DATE_START).AsDate := dtp_Date_Filt_Start.Date;
                   end;
                 1:
                   begin
-                    ParamByName(s_IN_FILT_DATE).AsDate := Cur_Date;
-                    cv_Repert_Date := Cur_Date;
+                    ParamByName(str_IN_FILT_DATE_START).AsDate := Cur_Date;
                   end;
               else
                 // foo
               end;
               s := '<null>';
-              if not ParamByName(s_IN_FILT_DATE).IsNull then
+              if not ParamByName(str_IN_FILT_DATE_START).IsNull then
               try
-                s := ParamByName(s_IN_FILT_DATE).AsString;
+                s := ParamByName(str_IN_FILT_DATE_START).AsString;
               except
                 s := '<error>';
               end;
-              DEBUGMessEnh(0, UnitName, ProcName, s_IN_FILT_DATE + ' = (' + s + ')');
-              DEBUGMessEnh(0, UnitName, ProcName, s_IN_FILT_DATE + ' = (' + s + ')');
+              DEBUGMessEnh(0, UnitName, ProcName, str_IN_FILT_DATE_START + ' = (' + s + ')');
             end;
+            // ------------
+            if Length(str_IN_FILT_DATE_FINISH) <> 0 then
+            begin
+              ParamByName(str_IN_FILT_DATE_FINISH).AsVariant := Null;
+              case Report_Mode of
+                0:
+                  begin
+                    ParamByName(str_IN_FILT_DATE_FINISH).AsDate := dtp_Date_Filt_Finish.Date;
+                  end;
+                1:
+                  begin
+                    ParamByName(str_IN_FILT_DATE_FINISH).AsDate := Cur_Date;
+                  end;
+              else
+                // foo
+              end;
+              s := '<null>';
+              if not ParamByName(str_IN_FILT_DATE_FINISH).IsNull then
+              try
+                s := ParamByName(str_IN_FILT_DATE_FINISH).AsString;
+              except
+                s := '<error>';
+              end;
+              DEBUGMessEnh(0, UnitName, ProcName, str_IN_FILT_DATE_FINISH + ' = (' + s + ')');
+            end
+            else
+              DEBUGMessEnh(0, UnitName, ProcName, str_IN_FILT_DATE_FINISH + ' param not found.');
             // ------------
             if Assigned(Params.FindParam(s_IN_SESSION_ID)) then
             begin
@@ -977,7 +1043,15 @@ var
 begin
   if (UpperCase(ParName) = 'REPORT_DATE') then
   begin
-    ParValue := FormatDateTime('ddd, dd mmmm, yyyy ã.', cv_Repert_Date);
+    ParValue := FormatDateTime('ddd, dd mmmm, yyyy ã.', cv_Repert_Date_Start);
+  end
+  else if (UpperCase(ParName) = 'REPORT_DATE_START') then
+  begin
+    ParValue := FormatDateTime('ddd, dd mmmm, yyyy ã.', cv_Repert_Date_Start);
+  end
+  else if (UpperCase(ParName) = 'REPORT_DATE_FINISH') then
+  begin
+    ParValue := FormatDateTime('ddd, dd mmmm, yyyy ã.', cv_Repert_Date_Finish);
   end
   else if (UpperCase(ParName) = 'REPORT_CINEMA_NAM') then
   begin
